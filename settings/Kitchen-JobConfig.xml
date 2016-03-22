@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.18.1">
+      <projectUrl>https://github.com/ndox/kitchensink-example/</projectUrl>
+      <displayName></displayName>
+    </com.coravy.hudson.plugins.github.GithubProjectProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.3">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/ndox/kitchensink-example.git</url>
+        <credentialsId>5866df4f-0947-41c4-8f56-404f3ea97dde</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/master</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <hudson.triggers.SCMTrigger>
+      <spec>H/5 * * * *</spec>
+      <ignorePostCommitHooks>false</ignorePostCommitHooks>
+    </hudson.triggers.SCMTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftBuilder plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>dev</namespace>
+      <authToken></authToken>
+      <verbose>true</verbose>
+      <bldCfg>kitchensink-example</bldCfg>
+      <commitID></commitID>
+      <buildName></buildName>
+      <showBuildLogs>true</showBuildLogs>
+      <checkForTriggeredDeployments>false</checkForTriggeredDeployments>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftBuilder>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>dev</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <depCfg>kitchensink-example</depCfg>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>dev</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <depCfg>kitchensink-example</depCfg>
+      <replicaCount>1</replicaCount>
+      <verifyReplicaCount>false</verifyReplicaCount>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>dev</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <svcName>kitchensink-example</svcName>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier>
+    <hudson.tasks.Shell>
+      <command>echo &quot;running tests and stuff&quot;</command>
+    </hudson.tasks.Shell>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>dev</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <testTag>latest</testTag>
+      <prodTag>promote-qa</prodTag>
+      <testStream>kitchensink-example</testStream>
+      <prodStream>kitchensink-example</prodStream>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>test</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <depCfg>kitchensink-example</depCfg>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>test</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <depCfg>kitchensink-example</depCfg>
+      <replicaCount>1</replicaCount>
+      <verifyReplicaCount>false</verifyReplicaCount>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>test</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <svcName>kitchensink-example</svcName>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier>
+    <hudson.tasks.Shell>
+      <command>echo &quot;running more tests and stuff&quot;
+echo &quot;TODO prod&quot;</command>
+    </hudson.tasks.Shell>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>dev</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <testTag>latest</testTag>
+      <prodTag>promote-prod</prodTag>
+      <testStream>kitchensink-example</testStream>
+      <prodStream>kitchensink-example</prodStream>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>prod</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <depCfg>kitchensink-example</depCfg>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>prod</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <depCfg>kitchensink-example</depCfg>
+      <replicaCount>5</replicaCount>
+      <verifyReplicaCount>false</verifyReplicaCount>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier plugin="openshift-pipeline@1.0.8">
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
+      <namespace>prod</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <svcName>kitchensink-example</svcName>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftServiceVerifier>
+    <hudson.tasks.Shell>
+      <command>echo &quot;Checking everything is ok after deployment to production&quot;</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>
